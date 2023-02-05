@@ -43,6 +43,7 @@ Material:
     - _EmissionLM: 0
     - _FadeSpeed: 0.15531465
     - _FadeStart: 1.521217
+    - _OneMinusReflectivity: 0.05
     - _Shininess: 0.61379665
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
