@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class PlayerMoutionContoller : MonoBehaviour
 {
-    [SerializeField] private float speed = 10.0f;
-    [SerializeField] private float rotationSpeed = 100.0f;
     public bool isMovingForward;
     public bool isMovingRight;
     public bool isMovingLeft;
     public bool isMovingBack;
-    
 
+    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float rotationSpeed = 100.0f;
+
+    public void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
     void Update()
     {
         MovePlayerByButtoms();
         RotateCameraByMouse();
-
-
     }
 
     private void MovePlayerByButtoms()
