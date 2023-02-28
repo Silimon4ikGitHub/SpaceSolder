@@ -8,6 +8,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [SerializeField] private Rigidbody rigidbody;
     [SerializeField] private float speed;
     [SerializeField] private int colliders;
+    [SerializeField] private Vector3 down;
     private Vector3 _normal;
     
     
@@ -22,6 +23,10 @@ public class PlayerPhysicsMovement : MonoBehaviour
         if (collision.contacts.Length != null && collision.contacts.Length < 2)
         {
         _normal = collision.contacts[0].normal;
+        }
+        else
+        {
+        _normal = down;
         }
     }
     
