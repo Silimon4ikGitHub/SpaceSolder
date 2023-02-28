@@ -8,9 +8,12 @@ public class PlayerMoutionContoller : MonoBehaviour
     public bool isMovingRight;
     public bool isMovingLeft;
     public bool isMovingBack;
-
-    [SerializeField] private float speed = 10.0f;
+    
+    [SerializeField] private float speed;
     [SerializeField] private float rotationSpeed = 100.0f;
+    [SerializeField] private Rigidbody rigidbody;
+    [SerializeField] private PlayerPhysicsMovement playerPhysicsMovement;
+    [SerializeField] private GameObject camera;
 
     public void Start()
     {
@@ -19,19 +22,21 @@ public class PlayerMoutionContoller : MonoBehaviour
     }
     void Update()
     {
-        MovePlayerByButtoms();
+        
         RotateCameraByMouse();
+        PlayerMoveByPhisics();
+        
     }
 
-    private void MovePlayerByButtoms()
+    public void PlayerMoveByPhisics()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        transform.position += transform.forward * vertical * speed * Time.deltaTime;
-        transform.position += transform.right * horizontal * speed * Time.deltaTime;
+        Vector3 movement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+        playerPhysicsMovement.Move(movement);
 
-        MoutionDirrectionCheck(horizontal, vertical);
+        MoutionDirrectionCheck(horizontalInput, verticalInput);
     }
 
     private void RotateCameraByMouse()
