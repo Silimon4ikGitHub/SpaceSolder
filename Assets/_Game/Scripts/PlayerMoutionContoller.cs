@@ -10,16 +10,21 @@ public class PlayerMoutionContoller : MonoBehaviour
     public bool isMovingBack;
     
     [SerializeField] private float speed;
-    [SerializeField] private float mouseSens;
-    [SerializeField] private float joystickSens;
+    [SerializeField] private float mouseSensX;
+    [SerializeField] private float mouseSensY;
+    [SerializeField] private float mouseY;
+    [SerializeField] private float joystickSensX;
+    [SerializeField] private float joystickSensY;
     [SerializeField] private GameObject cam;
     [SerializeField] private Vector3 movement;
+    [SerializeField] private Quaternion originrotation;
     [SerializeField] private Rigidbody myRB;
     [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
     [SerializeField] private FixedJoystick fixedJoystickScript;
 
     public void Start()
     {
+        originrotation = transform.rotation;
         //Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -45,21 +50,26 @@ public class PlayerMoutionContoller : MonoBehaviour
     private void RotateCameraByMouse()
     {
         float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-        
-        
-        transform.rotation *= Quaternion.AngleAxis(mouseX * mouseSens * Time.deltaTime, Vector3.up);
+        transform.rotation *= Quaternion.AngleAxis(mouseX * mouseSensX * Time.deltaTime, Vector3.up);
 
-        if(cam.transform.rotation.x > 10 && cam.transform.rotation.x < 30)
-        {
-            cam.transform.rotation *= Quaternion.AngleAxis(mouseY * mouseSens * Time.deltaTime, -Vector3.right);
-        }
+        mouseY += Input.GetAxis("Mouse Y") ;
+        mouseY = Mathf.Clamp(mouseY, -15, 5);
+        Quaternion rotationX = Quaternion.AngleAxis(-mouseY * mouseSensY, Vector3.right);
+        cam.transform.rotation = originrotation * transform.rotation * rotationX;  
     }
 
     private void RotateCameraByJoystick()
     {
         float joystickX = fixedJoystickScript.Horizontal;
-        transform.rotation *= Quaternion.AngleAxis(joystickX * mouseSens * Time.deltaTime, Vector3.up);
+        transform.rotation *= Quaternion.AngleAxis(joystickX * joystickSensX * Time.deltaTime, Vector3.up);
+
+        if (fixedJoystickScript.Vertical != 0)
+        {
+        //mouseY += fixedJoystickScript.Vertical;
+        //mouseY = Mathf.Clamp(mouseY, 355, 5);
+        //Quaternion rotationX = Quaternion.AngleAxis(-mouseY * joystickSensY, Vector3.right);
+        //cam.transform.rotation = originrotation * transform.rotation * rotationX;
+        }
     }
 
     private void MakeDirrectionByBottoms()

@@ -38676,10 +38676,14 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingBack: 0
   speed: 8
-  mouseSens: 500
-  joystickSens: 100
+  mouseSensX: 500
+  mouseSensY: 1
+  mouseY: 100
+  joystickSensX: 10
+  joystickSensY: 10
   cam: {fileID: 135622437}
   movement: {x: 0, y: 0, z: 0}
+  originrotation: {x: 0, y: 0, z: 0, w: 0}
   myRB: {fileID: 887266774}
   playerPhysicsScript: {fileID: 887266776}
   fixedJoystickScript: {fileID: 49824525}
