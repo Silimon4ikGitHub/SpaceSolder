@@ -10,8 +10,8 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [SerializeField] private int colliders;
     [SerializeField] private Vector3 down;
     private Vector3 _normal;
-    
-    
+
+
     public Vector3 Project(Vector3 forward)
     {
         return forward - Vector3.Dot(forward, _normal) * _normal;    
@@ -22,11 +22,11 @@ public class PlayerPhysicsMovement : MonoBehaviour
         colliders = collision.contacts.Length;
         if (collision.contacts.Length != 0 && collision.contacts.Length < 2)
         {
-        _normal = collision.contacts[0].normal;
+            _normal = collision.contacts[0].normal;
         }
         else
         {
-        _normal = down;
+            _normal = down;
         }
     }
     

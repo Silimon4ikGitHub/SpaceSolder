@@ -12,39 +12,45 @@ public class PlayerMoutionContoller : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float mouseSensX;
     [SerializeField] private float mouseSensY;
-    [SerializeField] private float mouseY;
+    private float mouseY;
+    [SerializeField] private float joystickY;
     [SerializeField] private float joystickSensX;
     [SerializeField] private float joystickSensY;
+    [SerializeField] private bool isJoystickController;
+    [SerializeField] private bool isKeyBoardMouseController;
+    [SerializeField]private bool isForwardButtonDown;
+    [SerializeField]private bool isRightButtonDown;
+    [SerializeField]private bool isLeftButtonDown;
+    [SerializeField]private bool isBackwardButtonDown;
     [SerializeField] private GameObject cam;
-    [SerializeField] private Vector3 movement;
-    [SerializeField] private Quaternion originrotation;
+    private Vector3 keyboardMovement;
+    private Vector3 tuchScreenmovement;
+    private Quaternion originrotation;
     [SerializeField] private Rigidbody myRB;
     [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
     [SerializeField] private FixedJoystick fixedJoystickScript;
 
-    public void Start()
-    {
-        originrotation = transform.rotation;
-        //Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+
     void Update()
     {
-        RotateCameraByMouse();
-        RotateCameraByJoystick();
+        if (isKeyBoardMouseController)
+        {
+            RotateCameraByMouse();
+            MakeDirrectionByKeyboard();
+        }
         
-        MakeDirrectionByBottoms();
-        
-        PlayerMoveByPhisics(movement);
-        
+        else if (isJoystickController)
+        {
+            RotateCameraByJoystick();
+            MakeDirrectionByJoysStick();
+        }
+        PlayerMoveByPhysics(keyboardMovement);
+        PlayerMoveByPhysics(tuchScreenmovement);
     }
 
-    public void PlayerMoveByPhisics(Vector3 dirrection)
+    public void PlayerMoveByPhysics(Vector3 dirrection)
     {
-        
         playerPhysicsScript.Move(dirrection);
-
-        
     }
 
     private void RotateCameraByMouse()
@@ -62,26 +68,93 @@ public class PlayerMoutionContoller : MonoBehaviour
     {
         float joystickX = fixedJoystickScript.Horizontal;
         transform.rotation *= Quaternion.AngleAxis(joystickX * joystickSensX * Time.deltaTime, Vector3.up);
-
-        if (fixedJoystickScript.Vertical != 0)
-        {
-        //mouseY += fixedJoystickScript.Vertical;
-        //mouseY = Mathf.Clamp(mouseY, 355, 5);
-        //Quaternion rotationX = Quaternion.AngleAxis(-mouseY * joystickSensY, Vector3.right);
-        //cam.transform.rotation = originrotation * transform.rotation * rotationX;
-        }
+        
+        joystickY += fixedJoystickScript.Vertical;
+        joystickY = Mathf.Clamp(joystickY, -30, 15);
+        Quaternion rotationY = Quaternion.AngleAxis(-joystickY * joystickSensY, Vector3.right);
+        cam.transform.rotation = originrotation * transform.rotation * rotationY;
     }
 
-    private void MakeDirrectionByBottoms()
+    private void MakeDirrectionByKeyboard()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         MoutionDirrectionCheck(horizontalInput, verticalInput);
 
-        movement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+        keyboardMovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
     }
 
+    public void MakeDirrectionByJoysStick()
+    {
+        float horizontalInput = 0;
+        float verticalInput = 0;
+        
+        if (isForwardButtonDown)
+        {
+            verticalInput++;
+        }
+        else if (isRightButtonDown)
+        {
+            horizontalInput++;
+        }
+        else if (isLeftButtonDown)
+        {
+            horizontalInput--;
+        }
+        else if (isBackwardButtonDown)
+        {
+            verticalInput--;
+        }
+        else
+        {
+            verticalInput = 0;
+            horizontalInput = 0;
+        }
+        
+        MoutionDirrectionCheck(horizontalInput, verticalInput);
+        tuchScreenmovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+    }
+    public void OnTuchScreenForwardButtonDown()
+    {
+        isForwardButtonDown = true;
+    }
+    public void OnTuchScreenForwardButtonUp()
+    {
+        isForwardButtonDown = false;
+    }
+    public void OnTuchScreenRightButtonDown()
+    {
+        isRightButtonDown = true;
+    }
+    public void OnTuchScreenRightButtonUp()
+    {
+        isRightButtonDown = false;
+    }
+    public void OnTuchScreenLeftButtonDown()
+    {
+        isLeftButtonDown = true;
+    }
+    public void OnTuchScreenLeftButtonUp()
+    {
+        isLeftButtonDown = false;
+    }
+    public void OnTuchScreenBackButtonDown()
+    {
+        isBackwardButtonDown = true;
+    }
+    public void OnTuchScreenBackButtonUp()
+    {
+        isBackwardButtonDown = false;
+    }
+    
+    public void Start()
+    {
+        originrotation = transform.rotation;
+        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
     private void MoutionDirrectionCheck(float horizontalInput, float verticalInput)
     {
         if (verticalInput > 0)
