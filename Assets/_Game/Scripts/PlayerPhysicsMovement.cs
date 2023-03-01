@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerPhysicsMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rigidbody;
+    [SerializeField] private Rigidbody myRB;
     [SerializeField] private float speed;
     [SerializeField] private int colliders;
     [SerializeField] private Vector3 down;
@@ -20,7 +20,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         colliders = collision.contacts.Length;
-        if (collision.contacts.Length != null && collision.contacts.Length < 2)
+        if (collision.contacts.Length != 0 && collision.contacts.Length < 2)
         {
         _normal = collision.contacts[0].normal;
         }
@@ -44,7 +44,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         Vector3 dirrectionAlongSurface = Project(direction.normalized);
         Vector3 offset = dirrectionAlongSurface * (speed * Time.deltaTime);
 
-        rigidbody.MovePosition(rigidbody.position + offset);
+        myRB.MovePosition(myRB.position + offset);
         
     }
 }

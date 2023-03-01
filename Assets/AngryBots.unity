@@ -3592,8 +3592,8 @@ Transform:
   - {fileID: 99861569}
   - {fileID: 1517299469}
   - {fileID: 1141575265}
-  - {fileID: 1751371443}
   - {fileID: 2028550038}
+  - {fileID: 1751371443}
   - {fileID: 1638450712}
   m_Father: {fileID: 6915}
   m_RootOrder: 6
@@ -31637,6 +31637,25 @@ MonoBehaviour:
   selectionLeft: {fileID: 1003794113}
   selectionDown: {fileID: 910553034}
   playerScript: {fileID: 887266770}
+--- !u!114 &49824525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49824523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleRange: 2
+  deadZone: 0
+  axisOptions: 0
+  snapX: 0
+  snapY: 0
+  background: {fileID: 1638544856}
+  handle: {fileID: 1986306652}
 --- !u!1001 &50806984
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38657,10 +38676,13 @@ MonoBehaviour:
   isMovingLeft: 0
   isMovingBack: 0
   speed: 8
-  rotationSpeed: 500
-  rigidbody: {fileID: 887266774}
-  playerPhysicsMovement: {fileID: 887266776}
-  camera: {fileID: 135622437}
+  mouseSens: 500
+  joystickSens: 100
+  cam: {fileID: 135622437}
+  movement: {x: 0, y: 0, z: 0}
+  myRB: {fileID: 887266774}
+  playerPhysicsScript: {fileID: 887266776}
+  fixedJoystickScript: {fileID: 49824525}
 --- !u!4 &887266771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: df1f47a0a2effe74488d5da197295a19, type: 3}
@@ -38722,7 +38744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9572198e7b4d9fe4e94265e9c6e4a065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 887266774}
+  myRB: {fileID: 887266774}
   speed: 7
   colliders: 0
   down: {x: 0, y: -10, z: 0}
@@ -47925,6 +47947,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b31efe57f7c144ab4a82e9d7b24a636d, type: 3}
+--- !u!224 &1986306652 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4128433113933156281, guid: 45c5770d42bd1854abf60474bb16e8c3, type: 3}
+  m_PrefabInstance: {fileID: 1151059696427720745}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1987742147
 GameObject:
   m_ObjectHideFlags: 0

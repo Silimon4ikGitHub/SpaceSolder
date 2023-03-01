@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Joystick : MonoBehaviour
+public class JoystickSprite : MonoBehaviour
 {
     [SerializeField] private GameObject selectionTop;
     [SerializeField] private GameObject selectionRight;

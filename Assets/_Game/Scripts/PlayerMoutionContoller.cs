@@ -10,39 +10,66 @@ public class PlayerMoutionContoller : MonoBehaviour
     public bool isMovingBack;
     
     [SerializeField] private float speed;
-    [SerializeField] private float rotationSpeed = 100.0f;
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private PlayerPhysicsMovement playerPhysicsMovement;
-    [SerializeField] private GameObject camera;
+    [SerializeField] private float mouseSens;
+    [SerializeField] private float joystickSens;
+    [SerializeField] private GameObject cam;
+    [SerializeField] private Vector3 movement;
+    [SerializeField] private Rigidbody myRB;
+    [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
+    [SerializeField] private FixedJoystick fixedJoystickScript;
 
     public void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
     void Update()
     {
-        
         RotateCameraByMouse();
-        PlayerMoveByPhisics();
+        RotateCameraByJoystick();
+        
+        MakeDirrectionByBottoms();
+        
+        PlayerMoveByPhisics(movement);
         
     }
 
-    public void PlayerMoveByPhisics()
+    public void PlayerMoveByPhisics(Vector3 dirrection)
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        
+        playerPhysicsScript.Move(dirrection);
 
-        Vector3 movement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
-        playerPhysicsMovement.Move(movement);
-
-        MoutionDirrectionCheck(horizontalInput, verticalInput);
+        
     }
 
     private void RotateCameraByMouse()
     {
         float mouseX = Input.GetAxis("Mouse X");
-        transform.rotation *= Quaternion.AngleAxis(mouseX * rotationSpeed * Time.deltaTime, Vector3.up);
+        float mouseY = Input.GetAxis("Mouse Y");
+        
+        
+        transform.rotation *= Quaternion.AngleAxis(mouseX * mouseSens * Time.deltaTime, Vector3.up);
+
+        if(cam.transform.rotation.x > 10 && cam.transform.rotation.x < 30)
+        {
+            cam.transform.rotation *= Quaternion.AngleAxis(mouseY * mouseSens * Time.deltaTime, -Vector3.right);
+        }
+    }
+
+    private void RotateCameraByJoystick()
+    {
+        float joystickX = fixedJoystickScript.Horizontal;
+        transform.rotation *= Quaternion.AngleAxis(joystickX * mouseSens * Time.deltaTime, Vector3.up);
+    }
+
+    private void MakeDirrectionByBottoms()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        MoutionDirrectionCheck(horizontalInput, verticalInput);
+
+        movement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
     }
 
     private void MoutionDirrectionCheck(float horizontalInput, float verticalInput)
