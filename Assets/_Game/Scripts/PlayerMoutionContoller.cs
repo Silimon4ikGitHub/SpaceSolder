@@ -4,32 +4,39 @@ using UnityEngine;
 
 public class PlayerMoutionContoller : MonoBehaviour
 {
+    [Header("For Check Only")]
     public bool isMovingForward;
     public bool isMovingRight;
     public bool isMovingLeft;
     public bool isMovingBack;
-    
+    [Header("Set MoveSpeed")]
     [SerializeField] private float speed;
+    [Header("Set Sensitivity")]
     [SerializeField] private float mouseSensX;
     [SerializeField] private float mouseSensY;
-    private float mouseY;
-    [SerializeField] private float joystickY;
     [SerializeField] private float joystickSensX;
     [SerializeField] private float joystickSensY;
+    [Header("Choose Controller")]
     [SerializeField] private bool isJoystickController;
     [SerializeField] private bool isKeyBoardMouseController;
-    [SerializeField]private bool isForwardButtonDown;
-    [SerializeField]private bool isRightButtonDown;
-    [SerializeField]private bool isLeftButtonDown;
-    [SerializeField]private bool isBackwardButtonDown;
     [SerializeField] private GameObject cam;
-    private Vector3 keyboardMovement;
-    private Vector3 tuchScreenmovement;
-    private Quaternion originrotation;
     [SerializeField] private Rigidbody myRB;
     [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
     [SerializeField] private FixedJoystick fixedJoystickScript;
+    private float _mouseY;
+    private float _joystickY;
+    private bool _isForwardButtonDown;
+    private bool _isRightButtonDown;
+    private bool _isLeftButtonDown;
+    private bool _isBackwardButtonDown;
+    private Vector3 _keyboardMovement;
+    private Vector3 _tuchScreenmovement;
+    private Quaternion _originrotation;
 
+    public void Start()
+    {
+        _originrotation = transform.rotation;
+    }
 
     void Update()
     {
@@ -37,15 +44,18 @@ public class PlayerMoutionContoller : MonoBehaviour
         {
             RotateCameraByMouse();
             MakeDirrectionByKeyboard();
+            PlayerMoveByPhysics(_keyboardMovement);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         
         else if (isJoystickController)
         {
             RotateCameraByJoystick();
             MakeDirrectionByJoysStick();
+            PlayerMoveByPhysics(_tuchScreenmovement);
         }
-        PlayerMoveByPhysics(keyboardMovement);
-        PlayerMoveByPhysics(tuchScreenmovement);
     }
 
     public void PlayerMoveByPhysics(Vector3 dirrection)
@@ -58,21 +68,10 @@ public class PlayerMoutionContoller : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         transform.rotation *= Quaternion.AngleAxis(mouseX * mouseSensX * Time.deltaTime, Vector3.up);
 
-        mouseY += Input.GetAxis("Mouse Y") ;
-        mouseY = Mathf.Clamp(mouseY, -15, 5);
-        Quaternion rotationX = Quaternion.AngleAxis(-mouseY * mouseSensY, Vector3.right);
-        cam.transform.rotation = originrotation * transform.rotation * rotationX;  
-    }
-
-    private void RotateCameraByJoystick()
-    {
-        float joystickX = fixedJoystickScript.Horizontal;
-        transform.rotation *= Quaternion.AngleAxis(joystickX * joystickSensX * Time.deltaTime, Vector3.up);
-        
-        joystickY += fixedJoystickScript.Vertical;
-        joystickY = Mathf.Clamp(joystickY, -30, 15);
-        Quaternion rotationY = Quaternion.AngleAxis(-joystickY * joystickSensY, Vector3.right);
-        cam.transform.rotation = originrotation * transform.rotation * rotationY;
+        _mouseY += Input.GetAxis("Mouse Y") ;
+        _mouseY = Mathf.Clamp(_mouseY, -15, 5);
+        Quaternion rotationX = Quaternion.AngleAxis(-_mouseY * mouseSensY, Vector3.right);
+        cam.transform.rotation = _originrotation * transform.rotation * rotationX;  
     }
 
     private void MakeDirrectionByKeyboard()
@@ -82,7 +81,18 @@ public class PlayerMoutionContoller : MonoBehaviour
 
         MoutionDirrectionCheck(horizontalInput, verticalInput);
 
-        keyboardMovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+        _keyboardMovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+    }
+
+    private void RotateCameraByJoystick()
+    {
+        float joystickX = fixedJoystickScript.Horizontal;
+        transform.rotation *= Quaternion.AngleAxis(joystickX * joystickSensX * Time.deltaTime, Vector3.up);
+        
+        _joystickY += fixedJoystickScript.Vertical;
+        _joystickY = Mathf.Clamp(_joystickY, -30, 15);
+        Quaternion rotationY = Quaternion.AngleAxis(-_joystickY * joystickSensY, Vector3.right);
+        cam.transform.rotation = _originrotation * transform.rotation * rotationY;
     }
 
     public void MakeDirrectionByJoysStick()
@@ -90,19 +100,19 @@ public class PlayerMoutionContoller : MonoBehaviour
         float horizontalInput = 0;
         float verticalInput = 0;
         
-        if (isForwardButtonDown)
+        if (_isForwardButtonDown)
         {
             verticalInput++;
         }
-        else if (isRightButtonDown)
+        else if (_isRightButtonDown)
         {
             horizontalInput++;
         }
-        else if (isLeftButtonDown)
+        else if (_isLeftButtonDown)
         {
             horizontalInput--;
         }
-        else if (isBackwardButtonDown)
+        else if (_isBackwardButtonDown)
         {
             verticalInput--;
         }
@@ -113,46 +123,40 @@ public class PlayerMoutionContoller : MonoBehaviour
         }
         
         MoutionDirrectionCheck(horizontalInput, verticalInput);
-        tuchScreenmovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
+        _tuchScreenmovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
     }
+
     public void OnTuchScreenForwardButtonDown()
     {
-        isForwardButtonDown = true;
+        _isForwardButtonDown = true;
     }
     public void OnTuchScreenForwardButtonUp()
     {
-        isForwardButtonDown = false;
+        _isForwardButtonDown = false;
     }
     public void OnTuchScreenRightButtonDown()
     {
-        isRightButtonDown = true;
+        _isRightButtonDown = true;
     }
     public void OnTuchScreenRightButtonUp()
     {
-        isRightButtonDown = false;
+        _isRightButtonDown = false;
     }
     public void OnTuchScreenLeftButtonDown()
     {
-        isLeftButtonDown = true;
+        _isLeftButtonDown = true;
     }
     public void OnTuchScreenLeftButtonUp()
     {
-        isLeftButtonDown = false;
+        _isLeftButtonDown = false;
     }
     public void OnTuchScreenBackButtonDown()
     {
-        isBackwardButtonDown = true;
+        _isBackwardButtonDown = true;
     }
     public void OnTuchScreenBackButtonUp()
     {
-        isBackwardButtonDown = false;
-    }
-    
-    public void Start()
-    {
-        originrotation = transform.rotation;
-        //Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        _isBackwardButtonDown = false;
     }
     
     private void MoutionDirrectionCheck(float horizontalInput, float verticalInput)
