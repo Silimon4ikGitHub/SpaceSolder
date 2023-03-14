@@ -23,6 +23,10 @@ public class PlayerMoutionContoller : MonoBehaviour
     [SerializeField] private Rigidbody myRB;
     [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
     [SerializeField] private FixedJoystick fixedJoystickScript;
+    private float _mouseYLimitMax = 5;
+    private float _mouseYLimitMin = -15;
+    private float _joystickYLimitMax = 5;
+    private float _joystickYLimitMin = -30;
     private float _mouseY;
     private float _joystickY;
     private bool _isForwardButtonDown;
@@ -69,7 +73,7 @@ public class PlayerMoutionContoller : MonoBehaviour
         transform.rotation *= Quaternion.AngleAxis(mouseX * mouseSensX * Time.deltaTime, Vector3.up);
 
         _mouseY += Input.GetAxis("Mouse Y") ;
-        _mouseY = Mathf.Clamp(_mouseY, -15, 5);
+        _mouseY = Mathf.Clamp(_mouseY, _mouseYLimitMin, _mouseYLimitMax);
         Quaternion rotationX = Quaternion.AngleAxis(-_mouseY * mouseSensY, Vector3.right);
         cam.transform.rotation = _originrotation * transform.rotation * rotationX;  
     }
@@ -90,7 +94,7 @@ public class PlayerMoutionContoller : MonoBehaviour
         transform.rotation *= Quaternion.AngleAxis(joystickX * joystickSensX * Time.deltaTime, Vector3.up);
         
         _joystickY += fixedJoystickScript.Vertical;
-        _joystickY = Mathf.Clamp(_joystickY, -30, 15);
+        _joystickY = Mathf.Clamp(_joystickY, _joystickYLimitMin, _joystickYLimitMax);
         Quaternion rotationY = Quaternion.AngleAxis(-_joystickY * joystickSensY, Vector3.right);
         cam.transform.rotation = _originrotation * transform.rotation * rotationY;
     }
