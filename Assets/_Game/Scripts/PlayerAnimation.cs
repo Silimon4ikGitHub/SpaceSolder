@@ -5,11 +5,14 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] Animator playerAnimator;
+    [SerializeField] Animator shooterAnimator;
     [SerializeField] PlayerMoutionContoller playerMoutionScript;
+    [SerializeField] PlayerShooting playerShootingScript;
     private bool _isMovingForward;
     private bool _isMovingRight;
     private bool _isMovingLeft;
     private bool _isMovingBack;
+    private bool _isShooting;
     void Awake()
     {
         playerAnimator = GetComponent<Animator>();
@@ -22,6 +25,7 @@ public class PlayerAnimation : MonoBehaviour
         _isMovingRight = playerMoutionScript.isMovingRight;
         _isMovingLeft = playerMoutionScript.isMovingLeft;
         _isMovingBack = playerMoutionScript.isMovingBack;
+        _isShooting = playerShootingScript.isShooting;
         
         if (_isMovingForward)
         {
@@ -57,6 +61,15 @@ public class PlayerAnimation : MonoBehaviour
         else
         {
             playerAnimator.SetBool("isMovingBack", false); 
+        }
+
+        if (_isShooting)
+        {
+            shooterAnimator.SetBool("isShooting", true);
+        }
+        else
+        {
+            shooterAnimator.SetBool("isShooting", false);
         }
     }
 }

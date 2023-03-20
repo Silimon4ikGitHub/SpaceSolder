@@ -44,6 +44,8 @@ public class PlayerMoutionContoller : MonoBehaviour
 
     void Update()
     {
+        CheckInputDevice();
+
         if (isKeyBoardMouseController)
         {
             RotateCameraByMouse();
@@ -59,6 +61,14 @@ public class PlayerMoutionContoller : MonoBehaviour
             RotateCameraByJoystick();
             MakeDirrectionByJoysStick();
             PlayerMoveByPhysics(_tuchScreenmovement);
+        }
+    }
+
+    private void CheckInputDevice()
+    {
+        if (Input.GetAxis("Mouse Y") > 0 || Input.GetAxis("Mouse X") > 0)
+        {
+            isKeyBoardMouseController = true;
         }
     }
 
