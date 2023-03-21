@@ -20,8 +20,8 @@ public class PlayerShooting : MonoBehaviour
 
     private void RaycastTargeting()
     {
-        Ray ray = new Ray(transform.position, camera.transform.forward);
-        Debug.DrawRay(transform.position, camera.transform.forward * 10000, Color.red);
+        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * 10000, Color.red);
 
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit)) ;

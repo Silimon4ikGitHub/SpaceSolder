@@ -44,7 +44,7 @@ public class PlayerMoutionContoller : MonoBehaviour
 
     void Update()
     {
-        //CheckInputDevice();
+        CheckInputDevice();
 
         if (isKeyBoardMouseController)
         {
