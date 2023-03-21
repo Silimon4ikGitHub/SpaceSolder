@@ -9,6 +9,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject camera;
     [SerializeField] private Transform aim;
+    [SerializeField] private PlayerMoutionContoller playerMoutionScript;
     public bool isShooting;
 
     void LateUpdate()
@@ -40,13 +41,25 @@ public class PlayerShooting : MonoBehaviour
 
     private void ShootOnMouseDown()
     {
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (playerMoutionScript.isKeyBoardMouseController)
         {
-            isShooting = true;
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                Shoot();
+            }
+            else
+            {
+                NoShoot();
+            }
         }
-        else
-        {
-            isShooting = false;
-        }
+    }
+
+    public void Shoot()
+    {
+        isShooting = true;
+    }
+    public void NoShoot()
+    {
+        isShooting = false;
     }
 }

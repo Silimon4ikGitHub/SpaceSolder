@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMoutionContoller : MonoBehaviour
 {
+    [Header("Choose Controller")]
+    public bool isJoystickController;
+    public bool isKeyBoardMouseController;
     [Header("For Check Only")]
     public bool isMovingForward;
     public bool isMovingRight;
@@ -16,9 +19,6 @@ public class PlayerMoutionContoller : MonoBehaviour
     [SerializeField] private float mouseSensY;
     [SerializeField] private float joystickSensX;
     [SerializeField] private float joystickSensY;
-    [Header("Choose Controller")]
-    [SerializeField] private bool isJoystickController;
-    [SerializeField] private bool isKeyBoardMouseController;
     [SerializeField] private GameObject cam;
     [SerializeField] private Rigidbody myRB;
     [SerializeField] private PlayerPhysicsMovement playerPhysicsScript;
@@ -44,7 +44,7 @@ public class PlayerMoutionContoller : MonoBehaviour
 
     void Update()
     {
-        CheckInputDevice();
+        //CheckInputDevice();
 
         if (isKeyBoardMouseController)
         {
@@ -58,6 +58,8 @@ public class PlayerMoutionContoller : MonoBehaviour
         
         else if (isJoystickController)
         {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             RotateCameraByJoystick();
             MakeDirrectionByJoysStick();
             PlayerMoveByPhysics(_tuchScreenmovement);
