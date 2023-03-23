@@ -17,7 +17,7 @@ public class JoystickSprite : MonoBehaviour
 
     private void SideSelectorSwitch()
     {
-        if (playerScript.isMovingForward)
+        if (playerScript.MovingData.IsMovingForward)
         {
             selectionTop.SetActive(true);
         }
@@ -26,7 +26,7 @@ public class JoystickSprite : MonoBehaviour
             selectionTop.SetActive(false);
         }
 
-        if (playerScript.isMovingRight)
+        if (playerScript.MovingData.IsMovingRight)
         {
             selectionRight.SetActive(true);
         }
@@ -35,7 +35,7 @@ public class JoystickSprite : MonoBehaviour
             selectionRight.SetActive(false);
         }
 
-        if (playerScript.isMovingLeft)
+        if (playerScript.MovingData.IsMovingLeft)
         {
             selectionLeft.SetActive(true);
         }
@@ -44,7 +44,7 @@ public class JoystickSprite : MonoBehaviour
             selectionLeft.SetActive(false);
         }
 
-        if (playerScript.isMovingBack)
+        if (playerScript.MovingData.IsMovingBack)
         {
             selectionDown.SetActive(true);
         }

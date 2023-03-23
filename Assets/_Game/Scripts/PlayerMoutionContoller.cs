@@ -8,10 +8,6 @@ public class PlayerMoutionContoller : MonoBehaviour
     public bool isJoystickController;
     public bool isKeyBoardMouseController;
     [Header("For Check Only")]
-    public bool isMovingForward;
-    public bool isMovingRight;
-    public bool isMovingLeft;
-    public bool isMovingBack;
     [Header("Set MoveSpeed")]
     [SerializeField] private float speed;
     [Header("Set Sensitivity")]
@@ -36,6 +32,7 @@ public class PlayerMoutionContoller : MonoBehaviour
     private Vector3 _keyboardMovement;
     private Vector3 _tuchScreenmovement;
     private Quaternion _originrotation;
+    public MovingDirrectionData MovingData { get; private set; }
 
     public void Start()
     {
@@ -95,7 +92,7 @@ public class PlayerMoutionContoller : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        MoutionDirrectionCheck(horizontalInput, verticalInput);
+        IsMoving(verticalInput, horizontalInput);
 
         _keyboardMovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
     }
@@ -137,8 +134,8 @@ public class PlayerMoutionContoller : MonoBehaviour
             verticalInput = 0;
             horizontalInput = 0;
         }
-        
-        MoutionDirrectionCheck(horizontalInput, verticalInput);
+
+        IsMoving(verticalInput, horizontalInput);
         _tuchScreenmovement = (transform.forward * verticalInput + transform.right * horizontalInput).normalized * speed;
     }
 
@@ -175,42 +172,54 @@ public class PlayerMoutionContoller : MonoBehaviour
         _isBackwardButtonDown = false;
     }
     
-    private void MoutionDirrectionCheck(float horizontalInput, float verticalInput)
+    private bool MoutionDirrectionCheck(float Input)
     {
-        if (verticalInput > 0)
+        bool dirrection = false;
+
+        if (Input > 0)
         {
-            isMovingForward = true;
-        }
-        else
-        {
-            isMovingForward = false;
+            dirrection = true;
         }
 
-        if (verticalInput < 0)
-        {
-            isMovingBack = true;
-        }
-        else
-        {
-            isMovingBack = false;
-        }
+        return dirrection;
+    }
 
-        if (horizontalInput > 0)
+    private MovingDirrectionData IsMoving(float vertical, float horizontal)
+    {
+        bool IsMovingForward = false;
+        bool IsMovingBack = false;
+        bool IsMovingRight = false;
+        bool IsMovingLeft = false;
+
+         if (vertical > 0)
+            IsMovingForward = true;
+
+        else if (vertical < 0)
+            IsMovingBack = true;
+
+         if (horizontal < 0)
+            IsMovingRight = true;
+
+        else if (horizontal > 0)
+            IsMovingLeft = true;
+
+        MovingData = new MovingDirrectionData(IsMovingForward, IsMovingRight, IsMovingLeft, IsMovingBack);
+        return MovingData;
+    }
+
+    public struct MovingDirrectionData
+    {
+        public readonly bool IsMovingForward;
+        public readonly bool IsMovingRight;
+        public readonly bool IsMovingLeft;
+        public readonly bool IsMovingBack;
+
+        public MovingDirrectionData (bool isMovingForward, bool isMovingLeft, bool isMovingRight, bool isMovingBack)
         {
-            isMovingRight = true;
-        }
-        else
-        {
-            isMovingRight = false;
-        }
-        
-        if (horizontalInput < 0)
-        {
-            isMovingLeft = true;
-        }
-        else
-        {
-            isMovingLeft = false;
+            IsMovingForward = isMovingForward;
+            IsMovingRight = isMovingRight;
+            IsMovingLeft = isMovingLeft;
+            IsMovingBack = isMovingBack;
         }
     }
 }

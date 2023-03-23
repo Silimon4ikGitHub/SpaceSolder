@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.UI;
+using static PlayerMoutionContoller;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GameObject camera;
     [SerializeField] private Transform aim;
     [SerializeField] private PlayerMoutionContoller playerMoutionScript;
-    public bool isShooting;
+    public ShootingData ShootData { get; private set; }
 
     void LateUpdate()
     {
@@ -43,23 +45,36 @@ public class PlayerShooting : MonoBehaviour
     {
         if (playerMoutionScript.isKeyBoardMouseController)
         {
+            bool isMouseDown;
+
             if (Input.GetKey(KeyCode.Mouse0))
-            {
-                Shoot();
-            }
+                isMouseDown = true;
             else
-            {
-                NoShoot();
-            }
+                isMouseDown = false;
+
+            IsShoot(isMouseDown);
         }
     }
+    
+    private ShootingData IsShoot(bool isMouseDown)
+    {
+        bool IsShooting;
 
-    public void Shoot()
-    {
-        isShooting = true;
+        IsShooting = isMouseDown;
+
+        ShootData = new ShootingData(IsShooting);
+        return ShootData;
     }
-    public void NoShoot()
+
+    public struct ShootingData
     {
-        isShooting = false;
+        public readonly bool IsShooting;
+
+        public ShootingData(bool isShooting)
+        {
+            IsShooting = isShooting;
+        }
     }
+    
+        
 }

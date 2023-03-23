@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimation : MonoBehaviour
+public class PlayerAnimation : MonoBehaviour 
 {
-    [SerializeField] Animator playerAnimator;
-    [SerializeField] Animator shooterAnimator;
-    [SerializeField] PlayerMoutionContoller playerMoutionScript;
-    [SerializeField] PlayerShooting playerShootingScript;
-    private bool _isMovingForward;
-    private bool _isMovingRight;
-    private bool _isMovingLeft;
-    private bool _isMovingBack;
-    private bool _isShooting;
+    
+    [SerializeField] private Animator shooterAnimator;
+    [SerializeField] private PlayerShooting playerShootingScript;
+    private Animator playerAnimator;
+    private PlayerMoutionContoller playerMoutionScript;
     void Awake()
     {
         playerAnimator = GetComponent<Animator>();
@@ -21,13 +17,8 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
-        _isMovingForward = playerMoutionScript.isMovingForward;
-        _isMovingRight = playerMoutionScript.isMovingRight;
-        _isMovingLeft = playerMoutionScript.isMovingLeft;
-        _isMovingBack = playerMoutionScript.isMovingBack;
-        _isShooting = playerShootingScript.isShooting;
         
-        if (_isMovingForward)
+        if (playerMoutionScript.MovingData.IsMovingForward)
         {
             playerAnimator.SetBool("isMovingForward", true);
         }
@@ -36,7 +27,7 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetBool("isMovingForward", false);
         }
 
-        if (_isMovingRight)
+        if (playerMoutionScript.MovingData.IsMovingRight)
         {
             playerAnimator.SetBool("isMovingRight", true);   
         }
@@ -45,7 +36,7 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetBool("isMovingRight", false);
         }
 
-        if (_isMovingLeft)
+        if (playerMoutionScript.MovingData.IsMovingLeft)
         {
             playerAnimator.SetBool("isMovingLeft", true); 
         }
@@ -54,7 +45,7 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetBool("isMovingLeft", false);
         }
 
-        if (_isMovingBack)
+        if (playerMoutionScript.MovingData.IsMovingBack)
         {
             playerAnimator.SetBool("isMovingBack", true); 
         }
@@ -63,7 +54,7 @@ public class PlayerAnimation : MonoBehaviour
             playerAnimator.SetBool("isMovingBack", false); 
         }
 
-        if (_isShooting)
+        if (playerShootingScript.ShootData.IsShooting)
         {
             shooterAnimator.SetBool("isShooting", true);
         }
